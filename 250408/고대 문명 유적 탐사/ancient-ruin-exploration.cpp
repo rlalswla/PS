@@ -33,6 +33,16 @@ vector<vector<int>>  rotateOnce(int row , int col, vector<vector<int>> treasure)
 
 int bfs(vector<vector<int>> &treasure, bool isDelete){
     vector<vector<bool>> visited(5,vector<bool>(5, false));
+    // if(isDelete == true){
+
+    //     for(auto i : treasure){
+    //         for(auto j : i){
+    //             cout << j;
+    //         }
+    //         cout << endl;
+    //     }
+    //     cout << endl;
+    // }
 
     int cntAll = 0 ; 
 
@@ -173,6 +183,18 @@ int cycle(vector<vector<int>> &treasure ){
                     row = r;
                     col = c;
                     deg = degs;
+                }else if( ret ==  max){
+                    if(degs == deg){
+                        if(c < col){
+                            row = r;
+                            col = c;
+                            deg = degs;
+                        }
+                    }else if (deg > degs){
+                        row = r;
+                        col = c;
+                        deg = degs;
+                    }
                 }
             }
         }
@@ -233,18 +255,6 @@ int main (){
         }
         cout << ans << ' ';
     }
-
-    // cout << ans;
-
-    
-    
-
-    //   for(auto i : treasure){
-    //     for(auto j : i){
-    //         cout << j;
-    //     }
-    //     cout << endl;
-    // }
 
     return 0;
 }
