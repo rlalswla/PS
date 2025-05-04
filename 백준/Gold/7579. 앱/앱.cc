@@ -1,67 +1,36 @@
 #include <iostream>
 #include <vector>
-#include <string>
-#include <algorithm>
+#include <numeric>
 #include <climits>
-#include <queue>
-
 using namespace std;
-
-int N, M;
-int ans = INT_MAX;
-
 
 int main() {
     ios::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-    
-    int N ,M;
+    cin.tie(nullptr);
+
+    int N, M;
     cin >> N >> M;
-    vector<int> v;
-    vector<int> u;
 
-    for(int i = 0 ; i < N ; i++){
-        int temp ;
-        cin >> temp;
-        v.push_back(temp);
-    }
+    vector<int> mem(N);
+    vector<int> cost(N);
 
-    for(int i = 0 ; i < N ; i++){
-        int temp ;
-        cin >> temp;
-        u.push_back(temp);
-    }
+    for (int &x : mem) cin >> x;
+    for (int &x : cost) cin >> x;
 
-    vector<pair<int,int>> table;
+    int maxCost = accumulate(cost.begin(), cost.end(), 0);
+    vector<int> dp(maxCost + 1, 0); // dp[i] = i 비용일 때 최대 메모리
 
-    for(int i = 0 ; i < N ; i++){
-        table.push_back({v[i], u[i]});    
-    }
+    int answer = INT_MAX;
 
-    // sort(table.begin(), table.end(), [](pair<int,int> & a, pair<int,int> &b){
-    //     if(a.second == b.second){
-    //         return a.first > b.first;
-    //     }
-    //     return a.second < b.second;
-    // });
-
-    vector<int>dp(10001,0);
-  
-    for(int i = 0 ; i < N ; i++){
-         for(int j = 10001 ; j >= 0 ; j--){
-            if(j >= table[i].second)
-            dp[j] = max(dp[j], dp[j-table[i].second]+ table[i].first);
-         }
-    }
-
-
-    for(int i = 0 ; i < 10001 ; i++){
-        if(dp[i] >= M){
-            cout << i ;
-            return 0 ;
+    for (int i = 0; i < N; ++i) {
+        for (int j = maxCost; j >= cost[i]; --j) {
+            dp[j] = max(dp[j], dp[j - cost[i]] + mem[i]);
+            if (dp[j] >= M) {
+                answer = min(answer, j); // 조기 조건 달성
+            }
         }
-   }
-    
-   return 0;
+    }
+
+    cout << answer << '\n';
+    return 0;
 }
