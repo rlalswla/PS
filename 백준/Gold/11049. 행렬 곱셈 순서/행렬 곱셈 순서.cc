@@ -1,37 +1,44 @@
-#include <iostream>
 #include <vector>
+#include <string>
+#include <algorithm>
+#include <queue>
+#include <iostream>
 #include <climits>
+
 using namespace std;
 
-int main() {
+int main (){
     ios::sync_with_stdio(false);
     cin.tie(NULL);
-
+    cout.tie(NULL);
+    
     int N;
     cin >> N;
+    
+    vector<pair<int,int>> v;
 
-    vector<pair<int, int>> matrix(N);
-    for (int i = 0; i < N; ++i) {
-        cin >> matrix[i].first >> matrix[i].second;
+    for(int i = 0 ; i < N ; i++){
+        int a,b;
+        cin >> a >> b;
+        v.push_back({a,b});
     }
 
+    vector<vector<int>> dp(N, vector<int> (N,0));
 
-    vector<vector<long long>> dp(N, vector<long long>(N, 0));
+    for(int length = 2 ; length < N+1 ; length++){
+        for(int i = 0 ; i <= N-length ; i++){ //시작점
+            int j = i + length -1;
+            dp[i][j] = INT_MAX;
 
-    for (int length = 2; length <= N; ++length) { 
-        for (int i = 0; i <= N - length; ++i) {
-            int j = i + length - 1;
-            dp[i][j] = LLONG_MAX;
-
-            for (int k = i; k < j; ++k) {
-                long long cost = dp[i][k] + dp[k + 1][j]
-                    + 1LL * matrix[i].first * matrix[k].second * matrix[j].second;
-
-                dp[i][j] = min(dp[i][j], cost);
+            for( int k = i ; k < j ; k++){
+                int cost = dp[i][k] + dp[k+1][j] + v[i].first * v[k].second * v[j].second;
+                dp[i][j] = min(dp[i][j] , cost);
             }
         }
     }
+    
+    cout << dp[0][N-1] << '\n';
 
-    cout << dp[0][N - 1] << '\n';
+
     return 0;
 }
