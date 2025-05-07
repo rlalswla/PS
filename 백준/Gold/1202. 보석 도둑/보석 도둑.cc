@@ -39,9 +39,13 @@ int main (){
     for (int i = 0; i < K ; i ++){
         int limitWeigth = backpack[i];
         
-        while (index < N && v[index].first <= limitWeigth) {
-            q.push(v[index].second);
-            index++;
+        while(1){
+            if( (limitWeigth < v[index].first) || index == N ){
+                break;
+            }else{
+                q.push(v[index].second);
+                index++;
+            }
         }
         
 
